@@ -75,3 +75,49 @@ func GetPendingFriendRequest(c echo.Context) error {
 
 	return responseJson(c, http.StatusOK, friends)
 }
+
+func AcceptFriendRequest(c echo.Context) error {
+	user := c.Get("user").(model.User)
+	stringId := c.Param("id")
+	friendId, err := strconv.ParseInt(stringId, 10, 64)
+	if err != nil {
+		return responseError(c, http.StatusUnprocessableEntity, err.Error())
+	}
+
+	err = repository.IsFriended(user.Id, friendId, c.Request().Context())
+	if err == sql.ErrNoRows {
+		return responseError(c, http.StatusUnprocessableEntity, "You have no request from this user")
+	} else if err != nil {
+		return responseError(c, http.StatusInternalServerError, err.Error())
+	}
+
+	err = repository.AcceptFriendRequest(user.Id, friendId, c.Request().Context())
+	if err != nil {
+		return responseError(c, http.StatusInternalServerError, err.Error())
+	}
+
+	return responseJson(c, http.StatusOK, nil)
+}
+
+func DeclineFriendRequest(c echo.Context) error {
+	user := c.Get("user").(model.User)
+	stringId := c.Param("id")
+	friendId, err := strconv.ParseInt(stringId, 10, 64)
+	if err != nil {
+		return responseError(c, http.StatusUnprocessableEntity, err.Error())
+	}
+
+	err = repository.IsFriended(user.Id, friendId, c.Request().Context())
+	if err == sql.ErrNoRows {
+		return responseError(c, http.StatusUnprocessableEntity, "You have no request from this user")
+	} else if err != nil {
+		return responseError(c, http.StatusInternalServerError, err.Error())
+	}
+
+	err = repository.RemoveFriend(user.Id, friendId, c.Request().Context())
+	if err != nil {
+		return responseError(c, http.StatusInternalServerError, err.Error())
+	}
+
+	return responseJson(c, http.StatusOK, nil)
+}

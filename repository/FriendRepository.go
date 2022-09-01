@@ -87,3 +87,11 @@ WHERE f.friend_id = ? AND f.status = "pending"
 	}
 	return friends, nil
 }
+
+func AcceptFriendRequest(userId int64, friendId int64, context context.Context) error {
+	db := openDBConnection()
+	defer db.Close()
+
+	_, err := db.ExecContext(context, `UPDATE user_friend SET status = 'accepted' WHERE (user_id = ? AND friend_id = ?) OR (friend_id = ? AND user_id = ?)`, userId, friendId, userId, friendId)
+	return err
+}

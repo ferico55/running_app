@@ -19,6 +19,8 @@ func main() {
 	e.POST("/friends/:id/add", controller.AddFriend, localMiddleware.Authorization)
 	e.DELETE("/friends/:id/remove", controller.RemoveFriend, localMiddleware.Authorization)
 	e.GET("/friends/requests", controller.GetPendingFriendRequest, localMiddleware.Authorization)
+	e.POST("/friends/requests/:id/accept", controller.AcceptFriendRequest, localMiddleware.Authorization)
+	e.POST("/friends/requests/:id/decline", controller.DeclineFriendRequest, localMiddleware.Authorization)
 
 	e.Logger.Fatal(e.Start(":8888"))
 }
