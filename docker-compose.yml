@@ -1,0 +1,40 @@
+version: "3.8"
+
+# for prod only run this file
+services:
+  app:
+    build: 
+      context: .
+    ports:
+      - 8888:8888
+    depends_on: 
+      - db
+    command: "air"
+    volumes:
+      - .:/app/
+    networks:
+      - backend-tier
+
+  db:
+    platform: linux/x86_64
+    image: mysql:latest
+    volumes:
+      - /var/lib/running:/var/lib/mysql
+    environment: 
+      MYSQL_USER: run
+      MYSQL_ROOT_PASSWORD: runner
+      MYSQL_DATABASE: run
+      MYSQL_PASSWORD: runner
+      MYSQL_ROOT_HOST: '%'
+    networks:
+      - backend-tier
+    ports:
+      - 3306:3306
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 5s
+      retries: 10
+
+networks:
+  backend-tier:
+    driver: bridge
