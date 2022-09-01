@@ -22,8 +22,11 @@ func main() {
 	e.POST("/friends/requests/:id/accept", controller.AcceptFriendRequest, localMiddleware.Authorization)
 	e.POST("/friends/requests/:id/decline", controller.DeclineFriendRequest, localMiddleware.Authorization)
 
+	e.POST("/run", controller.SaveRun, localMiddleware.Authorization)
+	e.GET("/run", controller.GetRunForUser, localMiddleware.Authorization)
+
 	e.Logger.Fatal(e.Start(":8888"))
 }
 
 // migrate -database "mysql://root:runner@tcp(localhost:3306)/run" -path ./migrations up
-// migrate create -ext sql -dir ../migrations -seq create_users_table
+// migrate create -ext sql -dir ./migrations -seq create_users_table
