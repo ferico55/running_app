@@ -3,7 +3,6 @@ package repository
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"strconv"
 	"strings"
 
@@ -150,7 +149,6 @@ func GetRunFromUsers(users []model.User, context context.Context) ([]model.Run, 
 		ids = append(ids, strconv.FormatInt(user.Id, 10))
 	}
 	in := strings.Join(ids, ",")
-	fmt.Print(in)
 
 	db := openDBConnection()
 	defer db.Close()
@@ -169,7 +167,6 @@ func GetRunFromUsers(users []model.User, context context.Context) ([]model.Run, 
 			return []model.Run{}, err
 		}
 
-		fmt.Println(run.Id)
 		run.FormattedDate = run.Date.Format("2 Jan 2006")
 		run.FormattedDuration = formatDuration(run.Duration)
 		runs = append(runs, run)
