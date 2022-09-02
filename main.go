@@ -24,8 +24,13 @@ func main() {
 
 	e.POST("/run", controller.SaveRun, localMiddleware.Authorization)
 	e.GET("/run", controller.GetRunForUser, localMiddleware.Authorization)
+	e.GET("/run/:id", controller.GetRunById, localMiddleware.Authorization)
+	e.GET("/friends/:friendId/run/:id", controller.GetRunById, localMiddleware.Authorization)
+	e.GET("/run/last", controller.GetLastRun, localMiddleware.Authorization)
+	e.GET("/friends/run", controller.GetFriendsRuns, localMiddleware.Authorization)
+	e.GET("/friends/:id/run", controller.GetRunForUserId, localMiddleware.Authorization)
 
-	e.Logger.Fatal(e.Start(":8888"))
+	e.Logger.Fatal(e.Start(":80"))
 }
 
 // migrate -database "mysql://root:runner@tcp(localhost:3306)/run" -path ./migrations up

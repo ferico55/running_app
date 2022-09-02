@@ -10,6 +10,7 @@ type Run struct {
 	Distance          int          `json:"distance" db:"distance"`
 	TotalSteps        int          `json:"total_steps" db:"total_steps"`
 	Routes            []Coordinate `json:"route"`
+	RawRoute          string       `db:"route" json:"-"`
 	FormattedDate     string       `json:"formatted_date"`
 	FormattedDuration string       `json:"formatted_duration"`
 }

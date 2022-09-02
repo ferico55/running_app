@@ -6,7 +6,7 @@ services:
     build: 
       context: .
     ports:
-      - 8888:8888
+      - 80:80
     depends_on: 
       - db
     command: "air"
