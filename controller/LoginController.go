@@ -39,7 +39,7 @@ func Login(c echo.Context) error {
 	user, err := repository.GetUserByUsername(requestBody.Username, c.Request().Context())
 
 	if user == nil {
-		return responseJson(c, http.StatusUnprocessableEntity, "Invalid username")
+		return responseError(c, http.StatusUnprocessableEntity, "Invalid username")
 	}
 	if err != nil {
 		return responseError(c, http.StatusInternalServerError, err.Error())
@@ -49,7 +49,7 @@ func Login(c echo.Context) error {
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(requestBody.Password))
 	if err != nil {
 		// fmt.Println(err)
-		return responseJson(c, http.StatusUnprocessableEntity, "Wrong password woi!")
+		return responseError(c, http.StatusUnprocessableEntity, "Wrong password woi!")
 	}
 
 	accessToken, refreshToken := GenerateAuthToken(*user)
